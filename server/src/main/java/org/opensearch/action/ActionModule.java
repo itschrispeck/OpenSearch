@@ -107,6 +107,8 @@ import org.opensearch.action.admin.cluster.snapshots.status.SnapshotsStatusActio
 import org.opensearch.action.admin.cluster.snapshots.status.TransportSnapshotsStatusAction;
 import org.opensearch.action.admin.cluster.state.ClusterStateAction;
 import org.opensearch.action.admin.cluster.state.TransportClusterStateAction;
+import org.opensearch.action.admin.cluster.state.term.GetTermVersionAction;
+import org.opensearch.action.admin.cluster.state.term.TransportGetTermVersionAction;
 import org.opensearch.action.admin.cluster.stats.ClusterStatsAction;
 import org.opensearch.action.admin.cluster.stats.TransportClusterStatsAction;
 import org.opensearch.action.admin.cluster.storedscripts.DeleteStoredScriptAction;
@@ -224,6 +226,12 @@ import org.opensearch.action.admin.indices.upgrade.post.UpgradeAction;
 import org.opensearch.action.admin.indices.upgrade.post.UpgradeSettingsAction;
 import org.opensearch.action.admin.indices.validate.query.TransportValidateQueryAction;
 import org.opensearch.action.admin.indices.validate.query.ValidateQueryAction;
+import org.opensearch.action.admin.indices.view.CreateViewAction;
+import org.opensearch.action.admin.indices.view.DeleteViewAction;
+import org.opensearch.action.admin.indices.view.GetViewAction;
+import org.opensearch.action.admin.indices.view.ListViewNamesAction;
+import org.opensearch.action.admin.indices.view.SearchViewAction;
+import org.opensearch.action.admin.indices.view.UpdateViewAction;
 import org.opensearch.action.bulk.BulkAction;
 import org.opensearch.action.bulk.TransportBulkAction;
 import org.opensearch.action.bulk.TransportShardBulkAction;
@@ -409,6 +417,7 @@ import org.opensearch.rest.action.admin.indices.RestUpdateSettingsAction;
 import org.opensearch.rest.action.admin.indices.RestUpgradeAction;
 import org.opensearch.rest.action.admin.indices.RestUpgradeStatusAction;
 import org.opensearch.rest.action.admin.indices.RestValidateQueryAction;
+import org.opensearch.rest.action.admin.indices.RestViewAction;
 import org.opensearch.rest.action.cat.AbstractCatAction;
 import org.opensearch.rest.action.cat.RestAliasAction;
 import org.opensearch.rest.action.cat.RestAllocationAction;
@@ -607,6 +616,7 @@ public class ActionModule extends AbstractModule {
         actions.register(ClusterAllocationExplainAction.INSTANCE, TransportClusterAllocationExplainAction.class);
         actions.register(ClusterStatsAction.INSTANCE, TransportClusterStatsAction.class);
         actions.register(ClusterStateAction.INSTANCE, TransportClusterStateAction.class);
+        actions.register(GetTermVersionAction.INSTANCE, TransportGetTermVersionAction.class);
         actions.register(ClusterHealthAction.INSTANCE, TransportClusterHealthAction.class);
         actions.register(ClusterUpdateSettingsAction.INSTANCE, TransportClusterUpdateSettingsAction.class);
         actions.register(ClusterRerouteAction.INSTANCE, TransportClusterRerouteAction.class);
@@ -720,6 +730,14 @@ public class ActionModule extends AbstractModule {
         actions.register(GetDataStreamAction.INSTANCE, GetDataStreamAction.TransportAction.class);
         actions.register(ResolveIndexAction.INSTANCE, ResolveIndexAction.TransportAction.class);
         actions.register(DataStreamsStatsAction.INSTANCE, DataStreamsStatsAction.TransportAction.class);
+
+        // Views:
+        actions.register(CreateViewAction.INSTANCE, CreateViewAction.TransportAction.class);
+        actions.register(DeleteViewAction.INSTANCE, DeleteViewAction.TransportAction.class);
+        actions.register(GetViewAction.INSTANCE, GetViewAction.TransportAction.class);
+        actions.register(UpdateViewAction.INSTANCE, UpdateViewAction.TransportAction.class);
+        actions.register(ListViewNamesAction.INSTANCE, ListViewNamesAction.TransportAction.class);
+        actions.register(SearchViewAction.INSTANCE, SearchViewAction.TransportAction.class);
 
         // Persistent tasks:
         actions.register(StartPersistentTaskAction.INSTANCE, StartPersistentTaskAction.TransportAction.class);
@@ -914,6 +932,14 @@ public class ActionModule extends AbstractModule {
         registerHandler.accept(new RestGetDataStreamsAction());
         registerHandler.accept(new RestResolveIndexAction());
         registerHandler.accept(new RestDataStreamsStatsAction());
+
+        // View API
+        registerHandler.accept(new RestViewAction.CreateViewHandler());
+        registerHandler.accept(new RestViewAction.DeleteViewHandler());
+        registerHandler.accept(new RestViewAction.GetViewHandler());
+        registerHandler.accept(new RestViewAction.UpdateViewHandler());
+        registerHandler.accept(new RestViewAction.SearchViewHandler());
+        registerHandler.accept(new RestViewAction.ListViewNamesHandler());
 
         // CAT API
         registerHandler.accept(new RestAllocationAction());
