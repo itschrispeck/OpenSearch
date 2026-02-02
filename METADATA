@@ -7,6 +7,4 @@ owner:
   managerEmail: guptas@uber.com
 reviewers:
   groups:
-    - search
-    - esaas_reviewers
-    - esaas_approvers!
+    - search-platform-team
